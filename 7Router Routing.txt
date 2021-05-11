@@ -1,0 +1,44 @@
+MPA  --- Multiple page application
+for every page there will be a seperate HTML and css
+-------------------------------------------------------------
+SPA  --- Single page application
+Fast page loading
+React is used mainly for SPA
+-------------------------------------------------------------
+npm install react-router-dom --save
+-------------------------------------------------------------
+<BrowseRouter></BrowseRouter>
+import {BrowserRouter} from 'react-router-dom'
+<BrowserRouter>
+    <Header />
+    <Home />
+    <About />
+    <Contact />
+  </BrowserRouter>
+--------------------------------------------------------------
+<Link to="path">Display Text</Link>
+import {Link} from 'react-router-dom'
+<Link to="/contact">Contact</Link>
+---------------------------------------------------------------
+import {BrowserRouter, Route} from 'react-router-dom'
+import NotFound from './component/notfound'
+<BrowserRouter>
+    <Header />
+    <Route exact path="/" component={Home} />
+    <Route exact path="/about" component={About} />
+    <Route exact path="/contact" component={Contact} />
+    <Route component={NotFound} />
+</BrowserRouter>
+----------------------------------------------------------------
+import {BrowserRouter, Route,Switch} from 'react-router-dom'
+import NotFound from './component/notfound'
+<BrowserRouter>
+    <Header />
+    <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/about" component={About} />
+        <Route exact path="/contact" component={Contact} />
+        <Route component={NotFound} />
+    </Switch>
+</BrowserRouter>
+

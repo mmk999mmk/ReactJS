@@ -1,0 +1,116 @@
+import {Component} from 'react'
+
+import BlogItem from '../BlogItem'
+
+import './index.css'
+
+class BlogsList extends Component {
+  state = {blogsData: []}
+
+  componentDidMount() {
+    this.getBlogData()
+  }
+
+  getBlogData = async () => {
+    const {blogsData} = this.state
+    const url = 'https://apis.ccbp.in/blogs'
+    const response = await fetch(url)
+    const data = await response.json()
+    const updatedData = data.map(each => ({
+      id: each.id,
+      title: each.title,
+      imageUrl: each.image_url,
+      avatarUrl: each.avatar_url,
+      author: each.author,
+      topic: each.topic,
+    }))
+    this.setState({blogsData: updatedData})
+  }
+
+  render() {
+    const {blogsData} = this.state
+    return (
+      <div className="blog-list-container">
+        {blogsData.map(item => (
+          <BlogItem blogData={item} key={item.id} />
+        ))}
+      </div>
+    )
+  }
+}
+
+export default BlogsList
+--------------------------------------------------------------
+import './index.css'
+
+const BlogItem = props => {
+  const {blogData} = props
+  const {id, imageUrl, topic, title, avatarUrl, author} = blogData
+  return (
+    <div className="item-container">
+      <img className="item-image" src={imageUrl} alt={`item${id}`} />
+
+      <div className="item-info">
+        <p className="item-topic">{topic}</p>
+
+        <p className="item-title">{title}</p>
+        <div className="author-info">
+          <img className="avatar" src={avatarUrl} alt={`avatar${id}`} />
+          <p className="author-name">{author}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default BlogItem
+--------------------------------------------------------------------------------
+spinner component in react:
+
+npm install react-loader-spinner --save
+
+import Loader from 'react-loader-spinner'
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
+import {Component} from 'react'
+
+import BlogItem from '../BlogItem'
+
+import './index.css'
+
+class BlogsList extends Component {
+  state = {blogsData: [], isLoading: true}
+
+  componentDidMount() {
+    this.getBlogData()
+  }
+
+  getBlogData = async () => {
+    const url = 'https://apis.ccbp.in/blogs'
+    const response = await fetch(url)
+    const data = await response.json()
+    const updatedData = data.map(each => ({
+      id: each.id,
+      title: each.title,
+      imageUrl: each.image_url,
+      avatarUrl: each.avatar_url,
+      author: each.author,
+      topic: each.topic,
+    }))
+    this.setState({blogsData: updatedData})
+  }
+
+  render() {
+    const {blogsData, isLoading} = this.state
+    return (
+      <div className="blog-list-container">
+        {isLoading ? (
+          <Loader type="TailSpin" color="#00BFFF" height={50} width={50} />
+        ) : (
+          blogsData.map(item => <BlogItem blogData={item} key={item.id} />)
+        )}
+      </div>
+    )
+  }
+}
+
+export default BlogsList

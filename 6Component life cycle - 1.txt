@@ -1,0 +1,81 @@
+Mounting ---- > Updating ----> Unmounting
+---------------------------------------------
+Mounting:
+Create an instance of the code.
+
+constructor()         -------- state and class variables are set
+render()              -------- return JSX and displayed in UI
+componentDidMount()   -------- will update and called last
+--------------------------------------------------------------------------
+Updating:
+when ever the state is change the code is updated and will render it.
+
+render()
+--------------------------------------------------------------------------
+Unmounting:
+component instance is removed from the DOM
+
+componentDidUnmount()   -------- will clear all the munt things
+---------------------------------------------------------------------------
+import {Component} from 'react'
+import './index.css'
+
+class Clock extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {date: new Date()}
+  }
+
+  componentDidMount() {
+    this.timerId = setInterval(this.tick, 1000)
+  }
+
+  componentWillUnmount() {
+    console.log('componentWillUnmount called')
+    clearInterval(this.timerId)
+  }
+
+  tick = () => {
+    this.setState({date: new Date()})
+  }
+
+  render() {
+    const {date} = this.state
+    return (
+      <div className="clock-container">
+        <h1 className="heading">Clock</h1>
+        <p>{date.toLocaleTimeString()}</p>
+      </div>
+    )
+  }
+}
+export default Clock
+------------------------------------------------------------
+import {Component} from 'react'
+import Clock from './components/Clock'
+
+import './App.css'
+
+class App extends Component {
+  state = {butt: true}
+
+  click = () => {
+    this.setState(prevState => ({butt: !prevState.butt}))
+  }
+
+  render() {
+    const {butt} = this.state
+    const res = butt ? 'Hide Clock' : 'Show Clock'
+
+    return (
+      <div className="app-container">
+        <button onClick={this.click} type="button" className="toggle-button">
+          {res}
+        </button>
+        {butt && <Clock />}
+      </div>
+    )
+  }
+}
+
+export default App
