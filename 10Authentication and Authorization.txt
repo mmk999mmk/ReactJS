@@ -1,0 +1,142 @@
+Authentication:Identifying ourselfs like login to a system with our password.
+
+Authorization:after logging ntothe system there are permissions for which we are authorized to see or not.
+
+history.push('/')
+history.replace('/')
+------------------------------
+loginform.js:
+------------------------------
+import {Component} from 'react'
+
+import './index.css'
+
+class LoginForm extends Component {
+  state = {
+    username: '',
+    password: '',
+  }
+
+  onChangeUsername = event => {
+    this.setState({username: event.target.value})
+  }
+
+  onChangePassword = event => {
+    this.setState({password: event.target.value})
+  }
+
+  onSubmitSuccess = () => {
+    const {history} = this.props
+    console.log(this.props)
+    history.replace('/')
+  }
+
+  onSubmitForm = async event => {
+    event.preventDefault()
+    const {username, password} = this.state
+    const userDetails = {username, password}
+    const url = 'https://apis.ccbp.in/login'
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(userDetails),
+    }
+    const response = await fetch(url, options)
+    const res = await response.json()
+    if (response.ok === true) {
+      this.onSubmitSuccess()
+    }
+  }
+
+  renderPasswordField = () => {
+    const {password} = this.state
+    return (
+      <>
+        <label className="input-label" htmlFor="password">
+          PASSWORD
+        </label>
+        <input
+          type="password"
+          id="password"
+          className="password-input-filed"
+          value={password}
+          onChange={this.onChangePassword}
+        />
+      </>
+    )
+  }
+
+  renderUsernameField = () => {
+    const {username} = this.state
+    return (
+      <>
+        <label className="input-label" htmlFor="username">
+          USERNAME
+        </label>
+        <input
+          type="text"
+          id="username"
+          className="username-input-filed"
+          value={username}
+          onChange={this.onChangeUsername}
+        />
+      </>
+    )
+  }
+
+  render() {
+    return (
+      <div className="login-form-container">
+        <img
+          src="https://assets.ccbp.in/frontend/react-js/nxt-trendz-logo-img.png"
+          className="login-website-logo-mobile-image"
+          alt="website logo"
+        />
+        <img
+          src="https://assets.ccbp.in/frontend/react-js/nxt-trendz-login-img.png"
+          className="login-image"
+          alt="website login"
+        />
+        <form className="form-container" onSubmit={this.onSubmitForm}>
+          <img
+            src="https://assets.ccbp.in/frontend/react-js/nxt-trendz-logo-img.png"
+            className="login-website-logo-desktop-image"
+            alt="website logo"
+          />
+          <div className="input-container">{this.renderUsernameField()}</div>
+          <div className="input-container">{this.renderPasswordField()}</div>
+          <button type="submit" className="login-button">
+            Login
+          </button>
+        </form>
+      </div>
+    )
+  }
+}
+
+export default LoginForm
+--------------------------------------
+app.js:
+---------------------------------------
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
+
+import LoginForm from './components/LoginForm'
+import Home from './components/Home'
+import Products from './components/Products'
+import Cart from './components/Cart'
+import NotFound from './components/NotFound'
+
+import './App.css'
+
+const App = () => (
+  <BrowserRouter>
+    <Switch>
+      <Route exact path="/login" component={LoginForm} />
+      <Route exact path="/" component={Home} />
+      <Route exact path="/products" component={Products} />
+      <Route exact path="/cart" component={Cart} />
+      <Route component={NotFound} />
+    </Switch>
+  </BrowserRouter>
+)
+
+export default App
